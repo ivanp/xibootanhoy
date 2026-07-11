@@ -19,10 +19,19 @@ fun XiboPlayerApp(
     engine: PlayerEngine?,
     logger: Logger,
     onSaveSettings: (CmsSettings) -> Unit,
+    onLogout: () -> Unit = {},
     initialSettings: CmsSettings? = null
 ) {
-    var showSettings by remember { mutableStateOf(initialSettings == null) }
+    // Use a keyed remember so it re-evaluates when initialSettings changes
+    var showSettings by remember(initialSettings) { mutableStateOf(initialSettings == null) }
     var savedSettings by remember { mutableStateOf(initialSettings) }
+
+    // Sync savedSettings when initialSettings changes from outside
+    LaunchedEffect(initialSettings) {
+        if (initialSettings != null) {
+            savedSettings = initialSettings
+        }
+    }
 
     if (showSettings) {
         SettingsScreen(
@@ -46,6 +55,14 @@ fun XiboPlayerApp(
         PlayerScreen(
             layoutState = layoutState,
             logger = logger,
+            onSettingsClick = {
+                showSettings = true
+            },
+            onLogout = {
+                onLogout()
+                savedSettings = null
+                showSettings = true
+            },
             modifier = Modifier.fillMaxSize()
         )
     }

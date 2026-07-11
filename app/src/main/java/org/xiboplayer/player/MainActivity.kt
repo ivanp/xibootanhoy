@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val scope = rememberCoroutineScope()
                     var initialSettings by remember { mutableStateOf<CmsSettings?>(null) }
-                    var engineReady by remember { mutableStateOf(false) }
+                    var engineRef by remember { mutableStateOf<PlayerEngine?>(null) }
 
                     // Load settings on first composition
                     LaunchedEffect(Unit) {
@@ -49,17 +49,26 @@ class MainActivity : ComponentActivity() {
                         initialSettings = settings
                         if (settings != null) {
                             startEngine(settings)
-                            engineReady = true
+                            engineRef = engine
                         }
                     }
 
                     XiboPlayerApp(
-                        engine = if (engineReady) engine else null,
+                        engine = engineRef,
                         logger = logger,
                         onSaveSettings = { settings ->
                             scope.launch { saveSettings(settings) }
                             if (engine == null) {
                                 startEngine(settings)
+                            }
+                            engineRef = engine
+                        },
+                        onLogout = {
+                            engine?.stop()
+                            engine = null
+                            engineRef = null
+                            scope.launch {
+                                dataStore.edit { it.clear() }
                             }
                         },
                         initialSettings = initialSettings

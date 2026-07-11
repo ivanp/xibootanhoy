@@ -1,4 +1,4 @@
-#Sat Jul 11 15:12:04 WIB 2026
+#Sat Jul 11 21:13:55 WIB 2026
 base.0=/home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
 base.2=/home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/dex/debug/mergeProjectDexDebug/12/classes.dex
