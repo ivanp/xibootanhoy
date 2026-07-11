@@ -8,8 +8,10 @@ import org.xiboplayer.player.api.XmdsClient
 import org.xiboplayer.player.model.*
 import org.xiboplayer.player.storage.FileCache
 import org.xiboplayer.player.util.Logger
+import org.xiboplayer.player.xmr.XmrClient
 import java.io.File
 import java.security.MessageDigest
+import java.util.concurrent.TimeUnit
 import kotlin.math.min
 
 /**
@@ -49,6 +51,7 @@ class PlayerEngine(
     val playerStatus: StateFlow<PlayerStatus> = _playerStatus
 
     private var collectJob: Job? = null
+    private var xmrClient: XmrClient? = null
     private var scheduleCheckJob: Job? = null
 
     /**
@@ -90,6 +93,8 @@ class PlayerEngine(
     fun stop() {
         collectJob?.cancel()
         scheduleCheckJob?.cancel()
+        xmrClient?.stop()
+        xmrClient = null
         logger.info("Player engine stopped")
     }
 
@@ -144,6 +149,124 @@ class PlayerEngine(
         }
     }
 
+    // ─── XMR message handling ───────────────────────────────────────
+
+    /**
+     * Handle an XMR message dispatched by the WebSocket client.
+     */
+    private fun handleXmrMessage(message: XmrMessage) {
+        logger.info("Handling XMR message: $message")
+        when (message) {
+            is XmrMessage.CollectNow -> {
+                logger.info("XMR: collectNow triggered")
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        collectOnce()
+                    } catch (e: Exception) {
+                        logger.error("XMR collectOnce failed: ${e.message}")
+                    }
+                }
+            }
+            is XmrMessage.Screenshot -> {
+                logger.info("XMR: screenshot triggered")
+                captureScreenshot()
+            }
+            is XmrMessage.Purge -> {
+                logger.info("XMR: purge triggered")
+                scope.launch(Dispatchers.IO) {
+                    try {
+                        cache.purge()
+                        collectOnce()
+                    } catch (e: Exception) {
+                        logger.error("XMR purge failed: ${e.message}")
+                    }
+                }
+            }
+            is XmrMessage.ChangeLayout -> {
+                logger.info("XMR: changeLayout to ${message.layoutId}")
+                val layout = cache.getLayout(message.layoutId)
+                if (layout != null) {
+                    currentLayouts = listOf(message.layoutId)
+                    currentLayoutIndex = 0
+                    _layoutState.value = LayoutState.Showing(layout)
+                } else {
+                    logger.warn("XMR: layout ${message.layoutId} not in cache")
+                }
+            }
+            is XmrMessage.OverlayLayout -> {
+                logger.info("XMR: overlayLayout ${message.layoutId} — not yet supported")
+                // TODO: Implement overlay layout support
+            }
+            is XmrMessage.RevertToSchedule -> {
+                logger.info("XMR: revertToSchedule")
+                checkSchedule()
+            }
+            is XmrMessage.WebHook -> {
+                logger.info("XMR: webhook ${message.code} — not yet supported")
+                // TODO: Implement webhook callback
+            }
+            is XmrMessage.Command -> {
+                logger.info("XMR: command ${message.code}")
+                executeCommand(message.code)
+            }
+        }
+    }
+
+    /**
+     * Capture a screenshot and submit it to the CMS.
+     */
+    private fun captureScreenshot() {
+        // Screenshot capture requires access to the Activity/View hierarchy.
+        // This is a placeholder that logs the request.
+        // Full implementation needs a reference to the root View or SurfaceView.
+        logger.info("Screenshot capture requested — implementation requires View reference")
+    }
+
+    /**
+     * Execute a CMS command by code.
+     */
+    private fun executeCommand(code: String) {
+        val command = playerSettings.commands[code]
+        if (command == null) {
+            logger.warn("XMR: command '$code' not found in player settings")
+            _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = false)
+            return
+        }
+
+        scope.launch(Dispatchers.IO) {
+            try {
+                val result = executeShellCommand(command.commandString)
+                val success = command.validationString.isEmpty() ||
+                    result.contains(command.validationString)
+                _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = success)
+                if (success) {
+                    logger.info("Command '$code' executed successfully")
+                } else {
+                    logger.warn("Command '$code' validation failed: expected '${command.validationString}', got '$result'")
+                }
+            } catch (e: Exception) {
+                logger.error("Command '$code' failed: ${e.message}")
+                _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = false)
+            }
+        }
+    }
+
+    /**
+     * Execute a shell command string and return its output.
+     */
+    private fun executeShellCommand(commandString: String): String {
+        val parts = commandString.split("\\s+".toRegex())
+        if (parts.isEmpty()) return ""
+
+        val process = Runtime.getRuntime().exec(parts.toTypedArray())
+        val output = process.inputStream.bufferedReader().readText()
+        val error = process.errorStream.bufferedReader().readText()
+        process.waitFor(30, TimeUnit.SECONDS)
+        process.destroy()
+
+        return if (error.isNotEmpty()) error else output
+    }
+
     // ─── Collect cycle ─────────────────────────────────────────────
 
     private fun collectOnce() {
@@ -164,6 +287,25 @@ class PlayerEngine(
         }
         playerSettings = settings
         logger.info("RegisterDisplay successful, collectInterval=${settings.collectInterval}")
+
+        // Start XMR WebSocket client if configured and not already running
+        val xmrAddr = settings.xmrNetworkAddress
+        if (xmrAddr.isNotEmpty() && xmrClient == null) {
+            logger.info("Starting XMR client for $xmrAddr")
+            xmrClient = XmrClient(
+                networkAddress = xmrAddr,
+                channel = settings.xmrChannel,
+                key = settings.xmrPubKey,
+                logger = logger,
+                scope = scope,
+                onMessage = ::handleXmrMessage
+            )
+            xmrClient?.start()
+        } else if (xmrAddr.isEmpty() && xmrClient != null) {
+            logger.info("XMR address cleared, stopping XMR client")
+            xmrClient?.stop()
+            xmrClient = null
+        }
 
         // 2. RequiredFiles
         val (required, purge) = xmds.requiredFiles()
@@ -340,7 +482,7 @@ fun Schedule.layoutsNow(): List<Long> {
     val now = System.currentTimeMillis()
     val tz = java.util.TimeZone.getDefault()
 
-    var curPrio = Int.MAX_VALUE
+    var curPrio = Int.MIN_VALUE
     val layouts = mutableListOf<Long>()
 
     for (entry in entries) {
@@ -348,7 +490,7 @@ fun Schedule.layoutsNow(): List<Long> {
         val to = parseXiboDate(entry.toDt, tz)
         if (from != null && to != null && now in from..to) {
             when {
-                entry.priority < curPrio -> {
+                entry.priority > curPrio -> {
                     curPrio = entry.priority
                     layouts.clear()
                     layouts.add(entry.layoutId)

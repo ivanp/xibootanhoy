@@ -19,6 +19,8 @@ data class PlayerSettings(
     val collectInterval: Long = 900L,
     val statsEnabled: Boolean = false,
     val xmrNetworkAddress: String = "",
+    val xmrChannel: String = "",
+    val xmrPubKey: String = "",
     val logLevel: String = "debug",
     val screenshotInterval: Long = 0L,
     val embeddedServerPort: Int = 9696,
@@ -148,6 +150,9 @@ sealed class XmrMessage {
     data object CollectNow : XmrMessage()
     data object Screenshot : XmrMessage()
     data object Purge : XmrMessage()
+    data class ChangeLayout(val layoutId: Long) : XmrMessage()
+    data class OverlayLayout(val layoutId: Long) : XmrMessage()
+    data object RevertToSchedule : XmrMessage()
     data class WebHook(val code: String) : XmrMessage()
     data class Command(val code: String) : XmrMessage()
 }

@@ -83,6 +83,8 @@ class XmdsClient(
 
         return PlayerSettings(
             xmrNetworkAddress = getChildText(display, "xmrNetworkAddress") ?: "",
+            xmrChannel = xmrChannel,
+            xmrPubKey = xmrPubKey,
             logLevel = getChildText(display, "logLevel") ?: "debug",
             displayName = getChildText(display, "displayName") ?: displayName,
             statsEnabled = getChildInt(display, "statsEnabled") != 0,
