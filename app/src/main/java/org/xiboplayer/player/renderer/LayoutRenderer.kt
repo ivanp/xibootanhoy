@@ -1,5 +1,7 @@
 package org.xiboplayer.player.renderer
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -28,7 +30,8 @@ import org.xiboplayer.player.util.Logger
 fun LayoutRenderer(
     layout: LayoutInfo,
     modifier: Modifier = Modifier,
-    logger: Logger = Logger()
+    logger: Logger = Logger(),
+    onWidgetAction: (Widget) -> Unit = {}
 ) {
     val parser = remember { XlfParser(logger) }
     val xlf = layout.xlf
@@ -103,7 +106,8 @@ fun LayoutRenderer(
                 RegionRenderer(
                     region = region,
                     scale = scale,
-                    logger = logger
+                    logger = logger,
+                    onWidgetAction = onWidgetAction
                 )
             }
         }
@@ -117,20 +121,65 @@ fun LayoutRenderer(
 private fun RegionRenderer(
     region: Region,
     scale: Float,
-    logger: Logger
+    logger: Logger,
+    onWidgetAction: (Widget) -> Unit = {}
 ) {
     val density = LocalDensity.current
 
     if (region.widgets.isEmpty()) return
 
-    var currentWidgetIndex by remember { mutableIntStateOf(0) }
+    // Read playlist cycling options from first widget that has them set
+    val firstWidget = region.widgets.first()
+    val cycle = firstWidget.cycle
+    val playCount = firstWidget.playCount.coerceAtLeast(1)
+    val random = firstWidget.random
 
-    // Cycle widgets based on duration
-    val currentWidget = region.widgets.getOrNull(currentWidgetIndex)
+    var currentWidgetIndex by remember { mutableIntStateOf(0) }
+    // How many times the current widget has been played in this slot
+    var currentPlayCount by remember { mutableIntStateOf(0) }
+    // Shuffled order for random mode; rebuilt each full cycle
+    var randomOrder by remember {
+        mutableStateOf(region.widgets.indices.toMutableList().also { it.shuffle() })
+    }
+    // Whether we've completed at least one full pass (controls non-cycle termination)
+    var cycleComplete by remember { mutableStateOf(false) }
+
+    val resolvedIndex = if (random) {
+        randomOrder.getOrElse(currentWidgetIndex) { 0 }
+    } else {
+        currentWidgetIndex
+    }
+    val currentWidget = region.widgets.getOrNull(resolvedIndex)
+
     if (currentWidget != null) {
-        LaunchedEffect(currentWidget.id) {
+        // Key on both widget identity and play-count iteration so LaunchedEffect fires each repeat
+        LaunchedEffect(resolvedIndex, currentPlayCount) {
             delay(currentWidget.duration)
-            currentWidgetIndex = (currentWidgetIndex + 1) % region.widgets.size
+
+            val nextPlayCount = currentPlayCount + 1
+            if (nextPlayCount < playCount) {
+                // Still need to play this widget more times
+                currentPlayCount = nextPlayCount
+            } else {
+                // Advance to next widget
+                currentPlayCount = 0
+                val nextIndex = currentWidgetIndex + 1
+                if (nextIndex >= region.widgets.size) {
+                    // Completed a full pass through all widgets
+                    if (cycle) {
+                        // Rebuild random order for next cycle
+                        if (random) {
+                            randomOrder = region.widgets.indices.toMutableList().also { it.shuffle() }
+                        }
+                        currentWidgetIndex = 0
+                    } else {
+                        // Non-cycling: mark complete, stay on last widget
+                        cycleComplete = true
+                    }
+                } else {
+                    currentWidgetIndex = nextIndex
+                }
+            }
         }
     }
 
@@ -145,13 +194,46 @@ private fun RegionRenderer(
                 height = with(density) { (region.height * scale).toDp() }
             )
     ) {
-        if (currentWidget != null) {
-            WidgetRenderer(
-                widget = currentWidget,
-                logger = logger
-            )
+        AnimatedContent(
+            targetState = currentWidget,
+            transitionSpec = {
+                val widget = targetState
+                val durationMs = widget?.transitionDuration?.toInt()?.takeIf { it > 0 } ?: 300
+                val transitionIn = widget?.transitionIn?.lowercase()
+                val transitionOut = widget?.transitionOut?.lowercase()
+
+                val enterAnim: EnterTransition = when (transitionIn) {
+                    "fly" -> slideInHorizontally(
+                        animationSpec = tween(durationMs),
+                        initialOffsetX = { fullWidth -> fullWidth }
+                    )
+                    "fade", null, "" -> fadeIn(animationSpec = tween(durationMs))
+                    else -> fadeIn(animationSpec = tween(durationMs))
+                }
+
+                val exitAnim: ExitTransition = when (transitionOut) {
+                    "fly" -> slideOutHorizontally(
+                        animationSpec = tween(durationMs),
+                        targetOffsetX = { fullWidth -> -fullWidth }
+                    )
+                    "fade", null, "" -> fadeOut(animationSpec = tween(durationMs))
+                    else -> fadeOut(animationSpec = tween(durationMs))
+                }
+
+                enterAnim togetherWith exitAnim
+            },
+            label = "widget-transition-${region.id}"
+        ) { widget ->
+            if (widget != null) {
+                WidgetRenderer(
+                    widget = widget,
+                    logger = logger,
+                    onAction = onWidgetAction
+                )
+            }
         }
     }
+
 }
 
 /**

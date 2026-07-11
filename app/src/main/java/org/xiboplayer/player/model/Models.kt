@@ -51,7 +51,8 @@ data class LayoutInfo(
     val width: Int = 1920,
     val height: Int = 1080,
     val backgroundColor: String = "#000000",
-    val enableStat: Boolean = true
+    val enableStat: Boolean = true,
+    val options: Map<String, String> = emptyMap()
 )
 
 /**
@@ -83,7 +84,21 @@ data class Widget(
     val raw: String = "",
     val fileId: Long? = null,
     val uri: String? = null,
-    val options: Map<String, String> = emptyMap()
+    val options: Map<String, String> = emptyMap(),
+    val cycle: Boolean = false,
+    val playCount: Int = 1,
+    val random: Boolean = false
+)
+
+/**
+ * An interactive action attached to a widget.
+ */
+data class WidgetAction(
+    val triggerType: String,
+    val triggerCode: String? = null,
+    val actionType: String,
+    val targetId: Long? = null,
+    val targetCode: String? = null
 )
 
 enum class WidgetType {
@@ -101,11 +116,21 @@ data class ScheduleEntry(
 )
 
 /**
+ * A campaign from the CMS schedule.
+ */
+data class Campaign(
+    val id: Long,
+    val priority: Int,
+    val layoutIds: List<Long>
+)
+
+/**
  * Schedule with optional default layout.
  */
 data class Schedule(
     val default: Long? = null,
-    val entries: List<ScheduleEntry> = emptyList()
+    val entries: List<ScheduleEntry> = emptyList(),
+    val campaigns: List<Campaign> = emptyList()
 )
 
 /**
@@ -151,7 +176,7 @@ sealed class XmrMessage {
     data object Screenshot : XmrMessage()
     data object Purge : XmrMessage()
     data class ChangeLayout(val layoutId: Long) : XmrMessage()
-    data class OverlayLayout(val layoutId: Long) : XmrMessage()
+    data class OverlayLayout(val layoutId: Long, val duration: Long? = null) : XmrMessage()
     data object RevertToSchedule : XmrMessage()
     data class WebHook(val code: String) : XmrMessage()
     data class Command(val code: String) : XmrMessage()

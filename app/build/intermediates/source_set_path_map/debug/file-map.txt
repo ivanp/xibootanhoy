@@ -54,9 +54,9 @@ org.xiboplayer.player.app-navigation-common-ktx-2.7.6-52 /home/ivan/.gradle/cach
 org.xiboplayer.player.app-recyclerview-1.3.0-53 /home/ivan/.gradle/caches/transforms-3/eb902f5bca1f8277472552f5f7584ad9/transformed/recyclerview-1.3.0/res
 org.xiboplayer.player.app-jetified-media3-ui-1.2.1-54 /home/ivan/.gradle/caches/transforms-3/ed53d052eb693991fd08f3b92679f712/transformed/jetified-media3-ui-1.2.1/res
 org.xiboplayer.player.app-jetified-activity-compose-1.8.2-55 /home/ivan/.gradle/caches/transforms-3/fae22790f40f4ba4f3eecb5d8598dc42/transformed/jetified-activity-compose-1.8.2/res
-org.xiboplayer.player.app-resValues-56 /home/ivan/Desktop/work/xibo/xibo-android-player/app/build/generated/res/resValues/debug
-org.xiboplayer.player.app-packageDebugResources-57 /home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-org.xiboplayer.player.app-packageDebugResources-58 /home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-org.xiboplayer.player.app-merged_res-59 /home/ivan/Desktop/work/xibo/xibo-android-player/app/build/intermediates/merged_res/debug
-org.xiboplayer.player.app-debug-60 /home/ivan/Desktop/work/xibo/xibo-android-player/app/src/debug/res
-org.xiboplayer.player.app-main-61 /home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/res
+org.xiboplayer.player.app-resValues-56 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/build/generated/res/resValues/debug
+org.xiboplayer.player.app-packageDebugResources-57 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+org.xiboplayer.player.app-packageDebugResources-58 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+org.xiboplayer.player.app-merged_res-59 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/build/intermediates/merged_res/debug
+org.xiboplayer.player.app-debug-60 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/debug/res
+org.xiboplayer.player.app-main-61 /home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/res

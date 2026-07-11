@@ -9,32 +9,32 @@
 9        android:targetSdkVersion="34" />
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:5:5-67
-11-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:5:22-64
+11-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:5:5-67
+11-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:5:22-64
 12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-12-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:6:5-79
-12-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:6:22-76
+12-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:6:5-79
+12-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:6:22-76
 13    <uses-permission
-13-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:7:5-8:38
+13-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:7:5-8:38
 14        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-14-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:7:22-78
+14-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:7:22-78
 15        android:maxSdkVersion="28" />
-15-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:8:9-35
+15-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:8:9-35
 16    <uses-permission
-16-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:9:5-10:38
+16-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:9:5-10:38
 17        android:name="android.permission.READ_EXTERNAL_STORAGE"
-17-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:9:22-77
+17-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:9:22-77
 18        android:maxSdkVersion="28" />
-18-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:10:9-35
+18-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:10:9-35
 19    <uses-permission android:name="android.permission.WAKE_LOCK" />
-19-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:11:5-68
-19-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:11:22-65
+19-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:11:5-68
+19-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:11:22-65
 20    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-20-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:12:5-77
-20-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:12:22-74
+20-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:12:5-77
+20-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:12:22-74
 21    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-21-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:13:5-81
-21-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:13:22-78
+21-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:13:5-81
+21-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:13:22-78
 22
 23    <permission
 23-->[androidx.core:core:1.12.0] /home/ivan/.gradle/caches/transforms-3/440a64c1659b3784956be1ef27019da1/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
@@ -48,75 +48,75 @@
 27-->[androidx.core:core:1.12.0] /home/ivan/.gradle/caches/transforms-3/440a64c1659b3784956be1ef27019da1/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
 28
 29    <application
-29-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:15:5-52:19
+29-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:15:5-52:19
 30        android:name="org.xiboplayer.player.XiboPlayerApp"
-30-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:16:9-38
+30-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:16:9-38
 31        android:allowBackup="true"
-31-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:17:9-35
+31-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:17:9-35
 32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 32-->[androidx.core:core:1.12.0] /home/ivan/.gradle/caches/transforms-3/440a64c1659b3784956be1ef27019da1/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
 33        android:debuggable="true"
 34        android:extractNativeLibs="false"
 35        android:icon="@mipmap/ic_launcher"
-35-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:18:9-43
+35-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:18:9-43
 36        android:label="Xibo Player"
-36-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:19:9-36
+36-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:19:9-36
 37        android:networkSecurityConfig="@xml/network_security_config"
-37-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:20:9-69
+37-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:20:9-69
 38        android:supportsRtl="true"
-38-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:21:9-35
+38-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:21:9-35
 39        android:theme="@style/Theme.XiboPlayer"
-39-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:22:9-48
+39-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:22:9-48
 40        android:usesCleartextTraffic="true" >
-40-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:23:9-44
+40-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:23:9-44
 41        <activity
-41-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:26:9-40:20
+41-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:26:9-40:20
 42            android:name="org.xiboplayer.player.MainActivity"
-42-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:27:13-41
+42-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:27:13-41
 43            android:configChanges="orientation|screenSize|keyboardHidden"
-43-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:29:13-74
+43-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:29:13-74
 44            android:exported="true"
-44-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:28:13-36
+44-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:28:13-36
 45            android:showOnLockScreen="true"
-45-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:30:13-44
+45-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:30:13-44
 46            android:showWhenLocked="true"
-46-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:31:13-42
+46-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:31:13-42
 47            android:theme="@style/Theme.XiboPlayer.Fullscreen"
-47-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:33:13-63
+47-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:33:13-63
 48            android:turnScreenOn="true" >
-48-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:32:13-40
+48-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:32:13-40
 49            <intent-filter>
-49-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:34:13-39:29
+49-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:34:13-39:29
 50                <action android:name="android.intent.action.MAIN" />
-50-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:35:17-69
-50-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:35:25-66
+50-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:35:17-69
+50-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:35:25-66
 51
 52                <category android:name="android.intent.category.LAUNCHER" />
-52-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:36:17-77
-52-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:36:27-74
+52-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:36:17-77
+52-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:36:27-74
 53                <category android:name="android.intent.category.HOME" />
-53-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:37:17-73
-53-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:37:27-70
+53-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:37:17-73
+53-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:37:27-70
 54                <category android:name="android.intent.category.DEFAULT" />
-54-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:38:17-76
-54-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:38:27-73
+54-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:38:17-76
+54-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:38:27-73
 55            </intent-filter>
 56        </activity>
 57
 58        <!-- Boot receiver to auto-start player -->
 59        <receiver
-59-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:43:9-50:20
+59-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:43:9-50:20
 60            android:name="org.xiboplayer.player.BootReceiver"
-60-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:44:13-41
+60-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:44:13-41
 61            android:enabled="true"
-61-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:45:13-35
+61-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:45:13-35
 62            android:exported="true" >
-62-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:46:13-36
+62-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:46:13-36
 63            <intent-filter>
-63-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:47:13-49:29
+63-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:47:13-49:29
 64                <action android:name="android.intent.action.BOOT_COMPLETED" />
-64-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:48:17-79
-64-->/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/AndroidManifest.xml:48:25-76
+64-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:48:17-79
+64-->/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/AndroidManifest.xml:48:25-76
 65            </intent-filter>
 66        </receiver>
 67

@@ -33,6 +33,8 @@ import kotlinx.coroutines.delay
 import org.xiboplayer.player.model.Widget
 import org.xiboplayer.player.model.WidgetType
 import org.xiboplayer.player.util.Logger
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.input.pointer.pointerInput
 
 /**
  * Renders a single widget in a Compose layout.
@@ -41,12 +43,16 @@ import org.xiboplayer.player.util.Logger
 fun WidgetRenderer(
     widget: Widget,
     modifier: Modifier = Modifier,
-    logger: Logger = Logger()
+    logger: Logger = Logger(),
+    onAction: (Widget) -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(Color.Black)
+            .pointerInput(widget.id) {
+                detectTapGestures { onAction(widget) }
+            }
     ) {
         when (widget.type) {
             WidgetType.IMAGE -> ImageWidget(widget)

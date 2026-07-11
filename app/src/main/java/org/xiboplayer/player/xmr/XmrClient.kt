@@ -155,7 +155,8 @@ class XmrClient(
                 val layoutId = json.get("layoutId")?.asLong
                     ?: json.get("layoutid")?.asLong
                     ?: return null
-                XmrMessage.OverlayLayout(layoutId)
+                val duration = json.get("duration")?.asLong
+                XmrMessage.OverlayLayout(layoutId, duration)
             }
             "reverttoschedule" -> XmrMessage.RevertToSchedule
             "webhook" -> {

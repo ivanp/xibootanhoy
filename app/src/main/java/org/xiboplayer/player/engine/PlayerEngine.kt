@@ -39,17 +39,26 @@ class PlayerEngine(
     private val cache = FileCache(cacheDir, logger)
     private val xlfParser = XlfParser(logger)
     private val commandExecutor = CommandExecutor(logger)
+    private val layoutPool = LayoutPool(cache, xlfParser, logger, scope)
 
     private var playerSettings: PlayerSettings = PlayerSettings()
     private var currentSchedule: Schedule = Schedule()
     private var currentLayouts: List<Long> = emptyList()
     private var currentLayoutIndex = 0
+    private var currentLayoutStartMs = 0L
+    private var currentLayoutDurationMs = 0L
+    private var preloadCheckJob: Job? = null
 
     private val _layoutState = MutableStateFlow<LayoutState>(LayoutState.Idle)
     val layoutState: StateFlow<LayoutState> = _layoutState
 
+    private val _overlayState = MutableStateFlow<LayoutState?>(null)
+    val overlayState: StateFlow<LayoutState?> = _overlayState
+
     private val _playerStatus = MutableStateFlow(PlayerStatus())
     val playerStatus: StateFlow<PlayerStatus> = _playerStatus
+
+    private var overlayDismissJob: Job? = null
 
     private var collectJob: Job? = null
     private var xmrClient: XmrClient? = null
@@ -94,8 +103,10 @@ class PlayerEngine(
     fun stop() {
         collectJob?.cancel()
         scheduleCheckJob?.cancel()
+        preloadCheckJob?.cancel()
         xmrClient?.stop()
         xmrClient = null
+        layoutPool.evictAll()
         logger.info("Player engine stopped")
     }
 
@@ -130,10 +141,7 @@ class PlayerEngine(
         if (currentLayouts.isEmpty()) return
         currentLayoutIndex = (currentLayoutIndex + 1) % currentLayouts.size
         val layoutId = currentLayouts[currentLayoutIndex]
-        val layout = cache.getLayout(layoutId)
-        if (layout != null) {
-            _layoutState.value = LayoutState.Showing(layout)
-        }
+        showLayout(layoutId)
     }
 
     /**
@@ -143,10 +151,140 @@ class PlayerEngine(
         val idx = currentLayouts.indexOf(layoutId)
         if (idx >= 0) {
             currentLayoutIndex = idx
-            val layout = cache.getLayout(layoutId)
-            if (layout != null) {
-                _layoutState.value = LayoutState.Showing(layout)
+            showLayout(layoutId)
+        }
+    }
+
+    /**
+     * Navigate to the previous layout.
+     */
+    fun previousLayout() {
+        if (currentLayouts.isEmpty()) return
+        currentLayoutIndex = if (currentLayoutIndex > 0) currentLayoutIndex - 1 else currentLayouts.size - 1
+        val layoutId = currentLayouts[currentLayoutIndex]
+        showLayout(layoutId)
+    }
+
+    /**
+     * Handle a widget action (triggered by touch or keyboard).
+     *
+     * Supported action types:
+     * - navLayout: jump to a specific layout by targetId
+     * - next: navigate to the next layout
+     * - previous: navigate to the previous layout
+     */
+    fun handleWidgetAction(action: WidgetAction) {
+        logger.info("Handling widget action: type=${action.actionType}, trigger=${action.triggerType}")
+        when (action.actionType) {
+            "navLayout" -> {
+                val targetId = action.targetId
+                if (targetId != null) {
+                    jumpToLayout(targetId)
+                } else {
+                    logger.warn("navLayout action missing targetId")
+                }
             }
+            "next" -> {
+                nextLayout()
+            }
+            "previous" -> {
+                previousLayout()
+            }
+            else -> {
+                logger.warn("Unknown widget action type: ${action.actionType}")
+            }
+        }
+    }
+
+    /**
+     * Show an overlay layout on top of the current content.
+     * Auto-dismisses after [duration] milliseconds if provided.
+     */
+    fun showOverlay(layoutId: Long, duration: Long? = null) {
+        val layout = cache.getLayout(layoutId)
+        if (layout != null) {
+            _overlayState.value = LayoutState.Showing(layout)
+            logger.info("Overlay layout $layoutId shown")
+
+            // Cancel any existing dismiss timer
+            overlayDismissJob?.cancel()
+
+            // Schedule auto-dismiss if duration is provided
+            if (duration != null && duration > 0) {
+                overlayDismissJob = scope.launch {
+                    delay(duration)
+                    dismissOverlay()
+                }
+            }
+        } else {
+            logger.warn("Overlay layout $layoutId not in cache")
+        }
+    }
+
+    /**
+     * Dismiss the current overlay immediately.
+     */
+    fun dismissOverlay() {
+        overlayDismissJob?.cancel()
+        overlayDismissJob = null
+        _overlayState.value = null
+        logger.info("Overlay dismissed")
+    }
+
+    // ─── Layout pool integration ────────────────────────────────────
+
+    /**
+     * Show a layout, preferring the pre-loaded pool with synchronous fallback.
+     *
+     * Tracks timing so the 75% preload trigger can fire for the next layout.
+     */
+    private fun showLayout(layoutId: Long) {
+        // Try the pool first (async pre-load), fall back to synchronous disk read
+        val layout = layoutPool.swap(layoutId) ?: cache.getLayout(layoutId)
+        if (layout != null) {
+            _layoutState.value = LayoutState.Showing(layout)
+            // Reset timing for the newly shown layout
+            currentLayoutStartMs = System.currentTimeMillis()
+            currentLayoutDurationMs = layoutDuration(layout)
+            // Schedule preload for the next layout at 75% of this one's duration
+            schedulePreload()
+        } else {
+            logger.warn("Layout $layoutId not available (pool miss + cache miss)")
+        }
+    }
+
+    /**
+     * Estimate the total duration of a layout from its widgets.
+     * Falls back to 30s if no widgets or XLF is empty.
+     */
+    private fun layoutDuration(layout: LayoutInfo): Long {
+        if (layout.xlf.isBlank()) return 30_000L
+        return try {
+            val regions = xlfParser.parseRegions(layout.xlf)
+            val maxWidgetDuration = regions.flatMap { it.widgets }.maxOfOrNull { it.duration } ?: 30_000L
+            // Layout duration = longest widget duration (standard Xibo behavior)
+            maxWidgetDuration
+        } catch (e: Exception) {
+            logger.warn("Could not parse layout duration for ${layout.id}: ${e.message}")
+            30_000L
+        }
+    }
+
+    /**
+     * Schedule a pre-load of the next layout at 75% of the current layout's duration.
+     */
+    private fun schedulePreload() {
+        preloadCheckJob?.cancel()
+        if (currentLayouts.size <= 1) return  // nothing to preload
+
+        val nextIdx = (currentLayoutIndex + 1) % currentLayouts.size
+        val nextLayoutId = currentLayouts[nextIdx]
+        val delayMs = (currentLayoutDurationMs * 0.75).toLong()
+
+        logger.debug("Scheduling preload for layout $nextLayoutId in ${delayMs}ms (75% of ${currentLayoutDurationMs}ms)")
+        preloadCheckJob = scope.launch {
+            delay(delayMs)
+            layoutPool.preload(nextLayoutId)
         }
     }
 
@@ -185,18 +323,13 @@ class PlayerEngine(
             }
             is XmrMessage.ChangeLayout -> {
                 logger.info("XMR: changeLayout to ${message.layoutId}")
-                val layout = cache.getLayout(message.layoutId)
-                if (layout != null) {
-                    currentLayouts = listOf(message.layoutId)
-                    currentLayoutIndex = 0
-                    _layoutState.value = LayoutState.Showing(layout)
-                } else {
-                    logger.warn("XMR: layout ${message.layoutId} not in cache")
-                }
+                currentLayouts = listOf(message.layoutId)
+                currentLayoutIndex = 0
+                showLayout(message.layoutId)
             }
             is XmrMessage.OverlayLayout -> {
-                logger.info("XMR: overlayLayout ${message.layoutId} — not yet supported")
-                // TODO: Implement overlay layout support
+                logger.info("XMR: overlayLayout ${message.layoutId}")
+                showOverlay(message.layoutId, message.duration)
             }
             is XmrMessage.RevertToSchedule -> {
                 logger.info("XMR: revertToSchedule")
@@ -428,15 +561,16 @@ class PlayerEngine(
         val newLayouts = currentSchedule.layoutsNow()
         if (newLayouts != currentLayouts) {
             logger.info("Schedule changed: ${newLayouts.joinToString()}")
+            // Evict pooled layouts that are no longer in the schedule
+            val removed = currentLayouts.toSet() - newLayouts.toSet()
+            removed.forEach { layoutPool.evict(it) }
+            preloadCheckJob?.cancel()
+
             currentLayouts = newLayouts
             currentLayoutIndex = 0
 
             if (currentLayouts.isNotEmpty()) {
-                val layoutId = currentLayouts[0]
-                val layout = cache.getLayout(layoutId)
-                if (layout != null) {
-                    _layoutState.value = LayoutState.Showing(layout)
-                }
+                showLayout(currentLayouts[0])
             } else {
                 _layoutState.value = LayoutState.Idle
             }
@@ -471,20 +605,34 @@ fun Schedule.layoutsNow(): List<Long> {
     var curPrio = Int.MIN_VALUE
     val layouts = mutableListOf<Long>()
 
+    // Collect active entries, tracking max priority
+    val activeEntries = mutableListOf<ScheduleEntry>()
+
     for (entry in entries) {
         val from = parseXiboDate(entry.fromDt, tz)
         val to = parseXiboDate(entry.toDt, tz)
         if (from != null && to != null && now in from..to) {
-            when {
-                entry.priority > curPrio -> {
-                    curPrio = entry.priority
-                    layouts.clear()
-                    layouts.add(entry.layoutId)
-                }
-                entry.priority == curPrio -> {
-                    layouts.add(entry.layoutId)
-                }
-            }
+            activeEntries.add(entry)
+            if (entry.priority > curPrio) curPrio = entry.priority
+        }
+    }
+
+    // Campaigns are always active when they appear in the schedule
+    // (campaign XML elements do not carry fromDt/toDt)
+    for (campaign in campaigns) {
+        if (campaign.priority > curPrio) curPrio = campaign.priority
+    }
+
+    // Collect all layout IDs at max priority
+    for (entry in activeEntries) {
+        if (entry.priority == curPrio) {
+            layouts.add(entry.layoutId)
+        }
+    }
+
+    for (campaign in campaigns) {
+        if (campaign.priority == curPrio) {
+            layouts.addAll(campaign.layoutIds)
         }
     }
 

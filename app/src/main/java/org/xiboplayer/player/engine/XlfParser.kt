@@ -31,12 +31,33 @@ class XlfParser(private val logger: Logger) {
         val bgColor = layoutEl.getAttribute("backgroundColor") ?: "#000000"
         val enableStat = (layoutEl.getAttribute("enableStat")?.toIntOrNull() ?: 1) != 0
 
+        // Parse layout-level options (transition, transitionDuration, etc.)
+        val options = mutableMapOf<String, String>()
+        val optionNodes = layoutEl.getElementsByTagName("options")
+        if (optionNodes.length > 0) {
+            val optionsEl = optionNodes.item(0) as? Element
+            if (optionsEl != null) {
+                for (j in 0 until optionsEl.attributes.length) {
+                    val attr = optionsEl.attributes.item(j)
+                    options[attr.nodeName] = attr.nodeValue ?: ""
+                }
+                val childNodes = optionsEl.childNodes
+                for (j in 0 until childNodes.length) {
+                    val child = childNodes.item(j)
+                    if (child is Element) {
+                        options[child.tagName] = child.textContent ?: ""
+                    }
+                }
+            }
+        }
+
         return LayoutInfo(
             id = layoutId,
             width = width,
             height = height,
             backgroundColor = bgColor,
-            enableStat = enableStat
+            enableStat = enableStat,
+            options = options
         )
     }
 
@@ -121,9 +142,32 @@ class XlfParser(private val logger: Logger) {
             }
         }
 
+        // Parse action elements (interactive widget actions)
+        val actions = mutableListOf<Map<String, String>>()
+        val actionNodes = mediaEl.getElementsByTagName("action")
+        for (j in 0 until actionNodes.length) {
+            val actionEl = actionNodes.item(j) as? Element ?: continue
+            val action = mutableMapOf<String, String>()
+            for (k in 0 until actionEl.attributes.length) {
+                val attr = actionEl.attributes.item(k)
+                action[attr.nodeName] = attr.nodeValue ?: ""
+            }
+            actions.add(action)
+        }
+        if (actions.isNotEmpty()) {
+            options["actions"] = actions.joinToString(";") { map ->
+                map.entries.joinToString(",") { "${it.key}=${it.value}" }
+            }
+        }
+
         // Parse fileId
         val fileId = mediaEl.getAttribute("fileId").toLongOrNull()
             ?: mediaEl.getAttribute("id").toLongOrNull()
+
+        // Parse sub-playlist cycling options from widget options map
+        val cycle = options["cycle"]?.let { it == "1" || it.equals("true", ignoreCase = true) } ?: false
+        val playCount = options["playCount"]?.toIntOrNull() ?: 1
+        val random = options["random"]?.let { it == "1" || it.equals("true", ignoreCase = true) } ?: false
 
         return Widget(
             id = id,
@@ -138,7 +182,10 @@ class XlfParser(private val logger: Logger) {
             transitionDuration = transitionDuration,
             raw = raw,
             fileId = fileId,
-            options = options
+            options = options,
+            cycle = cycle,
+            playCount = playCount,
+            random = random
         )
     }
 

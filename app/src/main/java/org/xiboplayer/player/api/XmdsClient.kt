@@ -191,14 +191,30 @@ class XmdsClient(
                 priority = el.getAttribute("priority").toIntOrNull() ?: 0
             ))
         }
-
         var defaultLayout: Long? = null
         val defaultEl = scheduleEl.getElementsByTagName("default")?.item(0) as? Element
         if (defaultEl != null) {
             defaultLayout = defaultEl.getAttribute("file").toLongOrNull()
         }
 
-        return Schedule(default = defaultLayout, entries = entries)
+        val campaigns = mutableListOf<Campaign>()
+        val campaignNodes = scheduleEl.getElementsByTagName("campaign")
+        for (i in 0 until campaignNodes.length) {
+            val el = campaignNodes.item(i) as? Element ?: continue
+            val layoutIds = mutableListOf<Long>()
+            val layoutChildren = el.getElementsByTagName("layout")
+            for (j in 0 until layoutChildren.length) {
+                val layoutEl = layoutChildren.item(j) as? Element ?: continue
+                layoutIds.add(layoutEl.getAttribute("file").toLongOrNull() ?: 0L)
+            }
+            campaigns.add(Campaign(
+                id = el.getAttribute("id").toLongOrNull() ?: 0L,
+                priority = el.getAttribute("priority").toIntOrNull() ?: 0,
+                layoutIds = layoutIds
+            ))
+        }
+
+        return Schedule(default = defaultLayout, entries = entries, campaigns = campaigns)
     }
 
     /**

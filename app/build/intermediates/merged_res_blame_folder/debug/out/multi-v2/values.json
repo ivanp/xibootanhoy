@@ -42,6 +42,23 @@
                     }
                 },
                 {
+                    "source": "/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/res/values/colors.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "56",
+                        "endOffsets": "107"
+                    },
+                    "to": {
+                        "startLines": "92",
+                        "startColumns": "4",
+                        "startOffsets": "4250",
+                        "endColumns": "56",
+                        "endOffsets": "4302"
+                    }
+                },
+                {
                     "source": "/home/ivan/.gradle/caches/transforms-3/716250cef10df459aded9ed877a14129/transformed/jetified-savedstate-1.2.1/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -167,7 +184,7 @@
                     }
                 },
                 {
-                    "source": "/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/res/values/themes.xml",
+                    "source": "/home/ivan/Desktop/work/xibo/xibo-android-player/.worktrees/feat/core-parity/app/src/main/res/values/themes.xml",
                     "from": {
                         "startLines": "2,8",
                         "startColumns": "4,4",
@@ -202,23 +219,6 @@
                         "endLines": "881,887,893,896,907",
                         "endColumns": "24,24,24,24,24",
                         "endOffsets": "48242,48486,48733,48866,49278"
-                    }
-                },
-                {
-                    "source": "/home/ivan/Desktop/work/xibo/xibo-android-player/app/src/main/res/values/colors.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "56",
-                        "endOffsets": "107"
-                    },
-                    "to": {
-                        "startLines": "92",
-                        "startColumns": "4",
-                        "startOffsets": "4250",
-                        "endColumns": "56",
-                        "endOffsets": "4302"
                     }
                 },
                 {
