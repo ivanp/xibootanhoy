@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Play button icon -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M38,30 L38,78 L78,54 Z" />
+</vector>
