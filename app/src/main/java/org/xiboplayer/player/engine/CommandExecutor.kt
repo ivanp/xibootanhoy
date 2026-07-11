@@ -64,7 +64,7 @@ class CommandExecutor(
             val validated = result.output.contains(command.validationString)
             if (!validated) {
                 logger.warn(
-                    "CommandExecutor: validation failed — " +
+                    "CommandExecutor: validation failed -- " +
                         "expected '${command.validationString}' in output, " +
                         "got '${result.output.take(200)}'"
                 )
@@ -98,10 +98,16 @@ class CommandExecutor(
             val error = process.errorStream.bufferedReader().readText()
             val completed = process.waitFor(30, TimeUnit.SECONDS)
 
+            if (!completed) {
+                process.destroyForcibly()
+                logger.warn("CommandExecutor: shell command timed out after 30s")
+                return CommandResult(success = false, output = "Command timed out")
+            }
+
             process.destroy()
 
             val resultOutput = if (error.isNotEmpty()) error else output
-            val success = completed && process.exitValue() == 0
+            val success = process.exitValue() == 0
 
             logger.info(
                 "CommandExecutor: shell command completed, " +

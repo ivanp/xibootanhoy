@@ -48,12 +48,11 @@ fun LayoutRenderer(
 
     var containerSize by remember { mutableStateOf(IntSize.Zero) }
     val density = LocalDensity.current
-
-    // Resolve media URIs from bare filenames to file:// paths via FileCache
     val context = LocalContext.current
     val cache = remember {
         FileCache(java.io.File(context.filesDir, "xibo-cache"), logger)
     }
+    // Resolve media URIs from bare filenames to file:// paths via FileCache
     val resolvedRegions = remember(regions) {
         regions.map { region ->
             region.copy(widgets = region.widgets.map { widget ->
