@@ -38,6 +38,7 @@ class PlayerEngine(
     private val xmds = XmdsClient(cmsSettings, httpClient, logger)
     private val cache = FileCache(cacheDir, logger)
     private val xlfParser = XlfParser(logger)
+    private val commandExecutor = CommandExecutor(logger)
 
     private var playerSettings: PlayerSettings = PlayerSettings()
     private var currentSchedule: Schedule = Schedule()
@@ -224,6 +225,9 @@ class PlayerEngine(
 
     /**
      * Execute a CMS command by code.
+     *
+     * Looks up the command in [PlayerSettings.commands] by code,
+     * delegates to [CommandExecutor], and updates [PlayerStatus.lastCommandSuccess].
      */
     private fun executeCommand(code: String) {
         val command = playerSettings.commands[code]
@@ -235,36 +239,18 @@ class PlayerEngine(
 
         scope.launch(Dispatchers.IO) {
             try {
-                val result = executeShellCommand(command.commandString)
-                val success = command.validationString.isEmpty() ||
-                    result.contains(command.validationString)
-                _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = success)
-                if (success) {
+                val result = commandExecutor.execute(command)
+                _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = result.success)
+                if (result.success) {
                     logger.info("Command '$code' executed successfully")
                 } else {
-                    logger.warn("Command '$code' validation failed: expected '${command.validationString}', got '$result'")
+                    logger.warn("Command '$code' failed: ${result.output.take(200)}")
                 }
             } catch (e: Exception) {
                 logger.error("Command '$code' failed: ${e.message}")
                 _playerStatus.value = _playerStatus.value.copy(lastCommandSuccess = false)
             }
         }
-    }
-
-    /**
-     * Execute a shell command string and return its output.
-     */
-    private fun executeShellCommand(commandString: String): String {
-        val parts = commandString.split("\\s+".toRegex())
-        if (parts.isEmpty()) return ""
-
-        val process = Runtime.getRuntime().exec(parts.toTypedArray())
-        val output = process.inputStream.bufferedReader().readText()
-        val error = process.errorStream.bufferedReader().readText()
-        process.waitFor(30, TimeUnit.SECONDS)
-        process.destroy()
-
-        return if (error.isNotEmpty()) error else output
     }
 
     // ─── Collect cycle ─────────────────────────────────────────────

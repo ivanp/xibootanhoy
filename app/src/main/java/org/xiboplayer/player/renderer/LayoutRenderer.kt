@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import kotlinx.coroutines.delay
 import org.xiboplayer.player.engine.XlfParser
+import org.xiboplayer.player.storage.FileCache
 import org.xiboplayer.player.model.LayoutInfo
 import org.xiboplayer.player.model.Region
 import org.xiboplayer.player.model.Widget
@@ -48,20 +49,20 @@ fun LayoutRenderer(
     var containerSize by remember { mutableStateOf(IntSize.Zero) }
     val density = LocalDensity.current
 
-    // Resolve media URIs from bare filenames to file:// paths
+    // Resolve media URIs from bare filenames to file:// paths via FileCache
     val context = LocalContext.current
-    val mediaCacheDir = remember {
-        java.io.File(context.filesDir, "xibo-cache/media")
+    val cache = remember {
+        FileCache(java.io.File(context.filesDir, "xibo-cache"), logger)
     }
     val resolvedRegions = remember(regions) {
         regions.map { region ->
             region.copy(widgets = region.widgets.map { widget ->
                 val uri = widget.options["uri"]
                 if (uri != null) {
-                    val mediaFile = java.io.File(mediaCacheDir, uri)
-                    if (mediaFile.exists()) {
-                        logger.debug("Resolved ${widget.id}: $uri -> file://${mediaFile.absolutePath}")
-                        widget.copy(uri = "file://${mediaFile.absolutePath}")
+                    val resolved = cache.resolveMediaUri(uri)
+                    if (resolved != null) {
+                        logger.debug("Resolved ${widget.id}: $uri -> $resolved")
+                        widget.copy(uri = resolved)
                     } else {
                         logger.warn("Media file not cached: $uri (widget ${widget.id})")
                         widget
