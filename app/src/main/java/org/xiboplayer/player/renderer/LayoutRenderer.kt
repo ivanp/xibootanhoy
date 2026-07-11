@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -47,6 +48,31 @@ fun LayoutRenderer(
     var containerSize by remember { mutableStateOf(IntSize.Zero) }
     val density = LocalDensity.current
 
+    // Resolve media URIs from bare filenames to file:// paths
+    val context = LocalContext.current
+    val mediaCacheDir = remember {
+        java.io.File(context.filesDir, "xibo-cache/media")
+    }
+    val resolvedRegions = remember(regions) {
+        regions.map { region ->
+            region.copy(widgets = region.widgets.map { widget ->
+                val uri = widget.options["uri"]
+                if (uri != null) {
+                    val mediaFile = java.io.File(mediaCacheDir, uri)
+                    if (mediaFile.exists()) {
+                        logger.debug("Resolved ${widget.id}: $uri -> file://${mediaFile.absolutePath}")
+                        widget.copy(uri = "file://${mediaFile.absolutePath}")
+                    } else {
+                        logger.warn("Media file not cached: $uri (widget ${widget.id})")
+                        widget
+                    }
+                } else {
+                    widget
+                }
+            })
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -73,7 +99,7 @@ fun LayoutRenderer(
                     height = with(density) { (layoutHeight * scale).toDp() }
                 )
         ) {
-            regions.forEach { region ->
+            resolvedRegions.forEach { region ->
                 RegionRenderer(
                     region = region,
                     scale = scale,

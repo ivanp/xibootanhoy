@@ -65,6 +65,15 @@ class FileCache(
     }
 
     /**
+     * Resolve a bare media filename (e.g. "26.jpg") to a local file:// URI.
+     * Returns null if the file is not in the cache.
+     */
+    fun resolveMediaUri(filename: String): String? {
+        val file = File(mediaDir, filename)
+        return if (file.exists()) "file://${file.absolutePath}" else null
+    }
+
+    /**
      * Get a layout by ID.
      */
     fun getLayout(layoutId: Long): LayoutInfo? {

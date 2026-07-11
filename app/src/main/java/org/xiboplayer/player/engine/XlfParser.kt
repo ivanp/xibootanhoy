@@ -105,9 +105,18 @@ class XlfParser(private val logger: Logger) {
         if (optionNodes.length > 0) {
             val optionsEl = optionNodes.item(0) as? Element
             if (optionsEl != null) {
+                // Parse attributes on <options> element
                 for (j in 0 until optionsEl.attributes.length) {
                     val attr = optionsEl.attributes.item(j)
                     options[attr.nodeName] = attr.nodeValue ?: ""
+                }
+                // Parse child elements of <options> (e.g. <uri>, <scaleType>)
+                val childNodes = optionsEl.childNodes
+                for (j in 0 until childNodes.length) {
+                    val child = childNodes.item(j)
+                    if (child is Element) {
+                        options[child.tagName] = child.textContent ?: ""
+                    }
                 }
             }
         }
