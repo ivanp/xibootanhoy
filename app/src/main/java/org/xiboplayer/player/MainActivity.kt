@@ -1,5 +1,6 @@
 package org.xiboplayer.player
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,29 +10,43 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import org.xiboplayer.player.engine.PlayerEngine
 import org.xiboplayer.player.model.CmsSettings
 import org.xiboplayer.player.ui.XiboPlayerApp
 import java.io.File
 
-private val android.app.Activity.dataStore by preferencesDataStore(name = "xibo_settings")
-
 class MainActivity : ComponentActivity() {
 
-    private var engine: PlayerEngine? = null
+    companion object {
+        private const val PREFS_NAME = "xibo_settings"
+        private const val KEY_ADDRESS = "cms_address"
+        private const val KEY_KEY = "cms_key"
+        private const val KEY_DISPLAY_ID = "display_id"
+        private const val KEY_DISPLAY_NAME = "display_name"
+    }
+
     private val appLogger get() = (application as XiboPlayerApp).logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val logger = appLogger
-
         setContent {
+            val logger = appLogger
+            val scope = rememberCoroutineScope()
+            var engine by remember { mutableStateOf<PlayerEngine?>(null) }
+            var initialSettings by remember { mutableStateOf<CmsSettings?>(null) }
+
+            // Load settings on first composition
+            LaunchedEffect(Unit) {
+                val settings = loadSettings()
+                initialSettings = settings
+                if (settings != null) {
+                    val e = createEngine(settings)
+                    e.start()
+                    engine = e
+                }
+            }
+
             MaterialTheme(
                 colorScheme = darkColorScheme
             ) {
@@ -39,37 +54,21 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val scope = rememberCoroutineScope()
-                    var initialSettings by remember { mutableStateOf<CmsSettings?>(null) }
-                    var engineRef by remember { mutableStateOf<PlayerEngine?>(null) }
-
-                    // Load settings on first composition
-                    LaunchedEffect(Unit) {
-                        val settings = loadSettings()
-                        initialSettings = settings
-                        if (settings != null) {
-                            startEngine(settings)
-                            engineRef = engine
-                        }
-                    }
-
                     XiboPlayerApp(
-                        engine = engineRef,
+                        engine = engine,
                         logger = logger,
                         onSaveSettings = { settings ->
-                            scope.launch { saveSettings(settings) }
+                            saveSettings(settings)
                             if (engine == null) {
-                                startEngine(settings)
+                                val e = createEngine(settings)
+                                e.start()
+                                engine = e
                             }
-                            engineRef = engine
                         },
                         onLogout = {
                             engine?.stop()
                             engine = null
-                            engineRef = null
-                            scope.launch {
-                                dataStore.edit { it.clear() }
-                            }
+                            clearSettings()
                         },
                         initialSettings = initialSettings
                     )
@@ -80,31 +79,29 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        engine?.stop()
     }
 
-    private fun startEngine(settings: CmsSettings) {
+    private fun createEngine(settings: CmsSettings): PlayerEngine {
         val cacheDir = File(filesDir, "xibo-cache")
         val scope = kotlinx.coroutines.MainScope()
-        engine = PlayerEngine(settings, cacheDir, appLogger, scope)
-        engine?.start()
+        return PlayerEngine(settings, cacheDir, appLogger, scope)
     }
 
-    private suspend fun saveSettings(settings: CmsSettings) {
-        dataStore.edit { prefs ->
-            prefs[stringPreferencesKey("cms_address")] = settings.address
-            prefs[stringPreferencesKey("cms_key")] = settings.key
-            prefs[stringPreferencesKey("display_id")] = settings.displayId
-            prefs[stringPreferencesKey("display_name")] = settings.displayName
-        }
+    private fun saveSettings(settings: CmsSettings) {
+        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
+            .putString(KEY_ADDRESS, settings.address)
+            .putString(KEY_KEY, settings.key)
+            .putString(KEY_DISPLAY_ID, settings.displayId)
+            .putString(KEY_DISPLAY_NAME, settings.displayName)
+            .apply()
     }
 
-    private suspend fun loadSettings(): CmsSettings? {
-        val prefs = dataStore.data.first()
-        val address = prefs[stringPreferencesKey("cms_address")] ?: return null
-        val key = prefs[stringPreferencesKey("cms_key")] ?: return null
-        val displayId = prefs[stringPreferencesKey("display_id")] ?: return null
-        val displayName = prefs[stringPreferencesKey("display_name")] ?: "Android Xibo Player"
+    private fun loadSettings(): CmsSettings? {
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val address = prefs.getString(KEY_ADDRESS, null) ?: return null
+        val key = prefs.getString(KEY_KEY, null) ?: return null
+        val displayId = prefs.getString(KEY_DISPLAY_ID, null) ?: return null
+        val displayName = prefs.getString(KEY_DISPLAY_NAME, "Android Xibo Player") ?: "Android Xibo Player"
 
         return CmsSettings(
             address = address,
@@ -112,6 +109,10 @@ class MainActivity : ComponentActivity() {
             displayId = displayId,
             displayName = displayName
         )
+    }
+
+    private fun clearSettings() {
+        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()
     }
 }
 
