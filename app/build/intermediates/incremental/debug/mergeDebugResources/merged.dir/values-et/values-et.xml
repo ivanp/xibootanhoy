@@ -110,25 +110,25 @@
     <string name="exo_track_selection_auto">Automaatne</string>
     <string name="exo_track_selection_none">Ühtegi</string>
     <string name="exo_track_selection_title_audio">Heli</string>
-    <string name="exo_track_selection_title_text">Tekst</string>
-    <string name="exo_track_selection_title_video">Video</string>
     <string name="exo_track_stereo">Stereo</string>
     <string name="exo_track_surround">Ruumiline heli</string>
     <string name="exo_track_surround_5_point_1">Ruumiline heli 5.1</string>
     <string name="exo_track_surround_7_point_1">Ruumiline heli 7.1</string>
     <string name="exo_track_unknown">Teadmata</string>
+    <string name="exo_track_unknown_name">Teadmata (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"Laiendatud"</string>
     <string msgid="6827826412747255547" name="in_progress">"Pooleli"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Osaliselt märgitud"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigeerimismenüü"</string>
     <string msgid="6610465462668679431" name="not_selected">"Pole valitud"</string>
-    <string msgid="875452955155264703" name="off">"Väljas"</string>
-    <string msgid="8655164131929253426" name="on">"Sees"</string>
     <string msgid="5941395253238309765" name="range_end">"Vahemiku lõpp"</string>
     <string msgid="7097486360902471446" name="range_start">"Vahemiku algus"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"Otsing"</string>
     <string msgid="6043586758067023" name="selected">"Valitud"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"Loobu"</string>
+    <string msgid="4139871816613051306" name="state_empty">"Tühi"</string>
+    <string msgid="5834637030682409883" name="state_off">"Väljas"</string>
+    <string msgid="1490883874751719580" name="state_on">"Sees"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"Soovitused on allpool"</string>
     <string msgid="2561197295334830845" name="switch_role">"Lüliti"</string>

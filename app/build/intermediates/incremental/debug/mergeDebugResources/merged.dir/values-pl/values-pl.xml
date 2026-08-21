@@ -114,25 +114,25 @@
     <string name="exo_track_selection_auto">Automatycznie</string>
     <string name="exo_track_selection_none">Brak</string>
     <string name="exo_track_selection_title_audio">Dźwięk</string>
-    <string name="exo_track_selection_title_text">Tekst</string>
-    <string name="exo_track_selection_title_video">Film</string>
     <string name="exo_track_stereo">Stereo</string>
     <string name="exo_track_surround">Dźwięk przestrzenny</string>
     <string name="exo_track_surround_5_point_1">System dźwięku przestrzennego 5.1</string>
     <string name="exo_track_surround_7_point_1">System dźwięku przestrzennego 7.1</string>
     <string name="exo_track_unknown">Nieznany</string>
+    <string name="exo_track_unknown_name">Nieznane (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"Rozwinięte"</string>
     <string msgid="6827826412747255547" name="in_progress">"W toku"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Częściowo zaznaczone"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Menu nawigacyjne"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nie wybrano"</string>
-    <string msgid="875452955155264703" name="off">"Wyłączono"</string>
-    <string msgid="8655164131929253426" name="on">"Włączono"</string>
     <string msgid="5941395253238309765" name="range_end">"Koniec zakresu"</string>
     <string msgid="7097486360902471446" name="range_start">"Początek zakresu"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"Wyszukiwanie"</string>
     <string msgid="6043586758067023" name="selected">"Wybrano"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"Zamknij"</string>
+    <string msgid="4139871816613051306" name="state_empty">"Puste"</string>
+    <string msgid="5834637030682409883" name="state_off">"Wyłączono"</string>
+    <string msgid="1490883874751719580" name="state_on">"Włączono"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"Propozycje znajdziesz poniżej"</string>
     <string msgid="2561197295334830845" name="switch_role">"Przełącznik"</string>

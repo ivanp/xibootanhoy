@@ -110,25 +110,25 @@
     <string name="exo_track_selection_auto">Otomatiki</string>
     <string name="exo_track_selection_none">Hamna</string>
     <string name="exo_track_selection_title_audio">Sauti</string>
-    <string name="exo_track_selection_title_text">Maandishi</string>
-    <string name="exo_track_selection_title_video">Video</string>
     <string name="exo_track_stereo">Stereo</string>
     <string name="exo_track_surround">Sauti inayozingira</string>
     <string name="exo_track_surround_5_point_1">Sauti inayozingira ya 5.1</string>
     <string name="exo_track_surround_7_point_1">Sauti inayozingira ya 7.1</string>
     <string name="exo_track_unknown">Haijulikani</string>
+    <string name="exo_track_unknown_name">(%1$s) isiyojulikana</string>
     <string msgid="5974471714631304645" name="expanded">"Imepanuliwa"</string>
     <string msgid="6827826412747255547" name="in_progress">"Inaendelea"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Imekaguliwa kwa kiasi fulani"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Menyu ya kusogeza"</string>
     <string msgid="6610465462668679431" name="not_selected">"Hujachagua"</string>
-    <string msgid="875452955155264703" name="off">"Imezimwa"</string>
-    <string msgid="8655164131929253426" name="on">"Imewashwa"</string>
     <string msgid="5941395253238309765" name="range_end">"Mwisho wa masafa"</string>
     <string msgid="7097486360902471446" name="range_start">"Mwanzo wa masafa"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"Tafuta"</string>
     <string msgid="6043586758067023" name="selected">"Umechagua"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"Ondoa"</string>
+    <string msgid="4139871816613051306" name="state_empty">"Tupu"</string>
+    <string msgid="5834637030682409883" name="state_off">"Imezimwa"</string>
+    <string msgid="1490883874751719580" name="state_on">"Imewashwa"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"Mapendekezo yaliyo hapa chini"</string>
     <string msgid="2561197295334830845" name="switch_role">"Swichi"</string>
