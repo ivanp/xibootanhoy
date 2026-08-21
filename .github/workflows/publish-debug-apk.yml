@@ -26,6 +26,9 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x gradlew
 
+      - name: Remove hardcoded java.home if present
+        run: sed -i '/org.gradle.java.home/d' gradle.properties
+
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
