@@ -2,7 +2,7 @@ name: Publish Debug APK
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "development" ]
     tags: [ "v*" ]
   workflow_dispatch:
 
