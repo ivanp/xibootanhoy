@@ -110,25 +110,25 @@
     <string name="exo_track_selection_auto">आपोआप</string>
     <string name="exo_track_selection_none">काहीही नाही</string>
     <string name="exo_track_selection_title_audio">ऑडिओ</string>
-    <string name="exo_track_selection_title_text">मजकूर</string>
-    <string name="exo_track_selection_title_video">व्हिडिओ</string>
     <string name="exo_track_stereo">स्टिरिओ</string>
     <string name="exo_track_surround">सराउंड साउंड</string>
     <string name="exo_track_surround_5_point_1">५.१ सराउंड साउंड</string>
     <string name="exo_track_surround_7_point_1">७.१ सराउंड साउंड</string>
     <string name="exo_track_unknown">अज्ञात</string>
+    <string name="exo_track_unknown_name">अज्ञात (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"विस्तारित केला"</string>
     <string msgid="6827826412747255547" name="in_progress">"प्रगतीपथावर आहे"</string>
     <string msgid="7933458017204019916" name="indeterminate">"अंशतः तपासले"</string>
     <string msgid="542007171693138492" name="navigation_menu">"नेव्हिगेशन मेनू"</string>
     <string msgid="6610465462668679431" name="not_selected">"निवडला नाही"</string>
-    <string msgid="875452955155264703" name="off">"बंद आहे"</string>
-    <string msgid="8655164131929253426" name="on">"सुरू आहे"</string>
     <string msgid="5941395253238309765" name="range_end">"रेंजचा शेवट"</string>
     <string msgid="7097486360902471446" name="range_start">"रेंजची सुरुवात"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"शोधा"</string>
     <string msgid="6043586758067023" name="selected">"निवडला"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"डिसमिस करा"</string>
+    <string msgid="4139871816613051306" name="state_empty">"रिक्त"</string>
+    <string msgid="5834637030682409883" name="state_off">"बंद आहे"</string>
+    <string msgid="1490883874751719580" name="state_on">"सुरू आहे"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"९९९+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"सूचना खाली आहेत"</string>
     <string msgid="2561197295334830845" name="switch_role">"स्विच"</string>

@@ -1,1 +1,7 @@
 .worktrees/
+/.gradle/
+/.idea/
+/app/build/
+/build_log.txt
+/build_log_cast.txt
+/build_log_stack.txt

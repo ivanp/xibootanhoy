@@ -110,25 +110,25 @@
     <string name="exo_track_selection_auto">อัตโนมัติ</string>
     <string name="exo_track_selection_none">ไม่มี</string>
     <string name="exo_track_selection_title_audio">เสียง</string>
-    <string name="exo_track_selection_title_text">ข้อความ</string>
-    <string name="exo_track_selection_title_video">วิดีโอ</string>
     <string name="exo_track_stereo">สเตอริโอ</string>
     <string name="exo_track_surround">เสียงเซอร์ราวด์</string>
     <string name="exo_track_surround_5_point_1">ระบบเสียง 5.1 เซอร์ราวด์</string>
     <string name="exo_track_surround_7_point_1">7.1 เสียงเซอร์ราวด์</string>
     <string name="exo_track_unknown">ไม่ทราบ</string>
+    <string name="exo_track_unknown_name">ไม่รู้จัก (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"ขยาย"</string>
     <string msgid="6827826412747255547" name="in_progress">"กำลังดำเนินการ"</string>
     <string msgid="7933458017204019916" name="indeterminate">"เลือกบางส่วน"</string>
     <string msgid="542007171693138492" name="navigation_menu">"เมนูการนำทาง"</string>
     <string msgid="6610465462668679431" name="not_selected">"ไม่ได้เลือก"</string>
-    <string msgid="875452955155264703" name="off">"ปิด"</string>
-    <string msgid="8655164131929253426" name="on">"เปิด"</string>
     <string msgid="5941395253238309765" name="range_end">"จุดสิ้นสุดของช่วง"</string>
     <string msgid="7097486360902471446" name="range_start">"จุดเริ่มต้นของช่วง"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"ค้นหา"</string>
     <string msgid="6043586758067023" name="selected">"เลือกไว้"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"ปิด"</string>
+    <string msgid="4139871816613051306" name="state_empty">"ว่าง"</string>
+    <string msgid="5834637030682409883" name="state_off">"ปิดอยู่"</string>
+    <string msgid="1490883874751719580" name="state_on">"เปิดอยู่"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"มีคำแนะนำที่ด้านล่าง"</string>
     <string msgid="2561197295334830845" name="switch_role">"เปลี่ยน"</string>

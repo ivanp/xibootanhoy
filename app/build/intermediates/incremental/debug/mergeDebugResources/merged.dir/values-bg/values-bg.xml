@@ -110,25 +110,25 @@
     <string name="exo_track_selection_auto">Автоматично</string>
     <string name="exo_track_selection_none">Нищо</string>
     <string name="exo_track_selection_title_audio">Аудиозапис</string>
-    <string name="exo_track_selection_title_text">Текст</string>
-    <string name="exo_track_selection_title_video">Видеозапис</string>
     <string name="exo_track_stereo">Стерео</string>
     <string name="exo_track_surround">Обемен звук</string>
     <string name="exo_track_surround_5_point_1">5,1-канален обемен звук</string>
     <string name="exo_track_surround_7_point_1">7,1-канален обемен звук</string>
     <string name="exo_track_unknown">Неизвестно</string>
+    <string name="exo_track_unknown_name">Няма данни (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"Разгънато"</string>
     <string msgid="6827826412747255547" name="in_progress">"В ход"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Частично отметнато"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Меню за навигация"</string>
     <string msgid="6610465462668679431" name="not_selected">"Не е избрано"</string>
-    <string msgid="875452955155264703" name="off">"Изкл."</string>
-    <string msgid="8655164131929253426" name="on">"Вкл."</string>
     <string msgid="5941395253238309765" name="range_end">"Край на обхвата"</string>
     <string msgid="7097486360902471446" name="range_start">"Начало на обхвата"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"Търсене"</string>
     <string msgid="6043586758067023" name="selected">"Избрано"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"Отхвърляне"</string>
+    <string msgid="4139871816613051306" name="state_empty">"Празно"</string>
+    <string msgid="5834637030682409883" name="state_off">"Изключено"</string>
+    <string msgid="1490883874751719580" name="state_on">"Включено"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"Предложенията са по-долу"</string>
     <string msgid="2561197295334830845" name="switch_role">"Превключване"</string>

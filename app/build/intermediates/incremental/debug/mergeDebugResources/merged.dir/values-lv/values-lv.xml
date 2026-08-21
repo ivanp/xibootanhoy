@@ -112,25 +112,25 @@
     <string name="exo_track_selection_auto">Automātisks</string>
     <string name="exo_track_selection_none">Nav</string>
     <string name="exo_track_selection_title_audio">Audio</string>
-    <string name="exo_track_selection_title_text">Teksts</string>
-    <string name="exo_track_selection_title_video">Video</string>
     <string name="exo_track_stereo">Stereo</string>
     <string name="exo_track_surround">Ieskaujošā skaņa</string>
     <string name="exo_track_surround_5_point_1">5.1 ieskaujošā skaņa</string>
     <string name="exo_track_surround_7_point_1">7.1 ieskaujošā skaņa</string>
     <string name="exo_track_unknown">Nezināms</string>
+    <string name="exo_track_unknown_name">Nezināma (%1$s)</string>
     <string msgid="5974471714631304645" name="expanded">"Izvērsts"</string>
     <string msgid="6827826412747255547" name="in_progress">"Notiek apstrāde"</string>
     <string msgid="7933458017204019916" name="indeterminate">"Daļēji atzīmēta"</string>
     <string msgid="542007171693138492" name="navigation_menu">"Navigācijas izvēlne"</string>
     <string msgid="6610465462668679431" name="not_selected">"Nav atlasīts"</string>
-    <string msgid="875452955155264703" name="off">"Izslēgts"</string>
-    <string msgid="8655164131929253426" name="on">"Ieslēgts"</string>
     <string msgid="5941395253238309765" name="range_end">"Diapazona beigas"</string>
     <string msgid="7097486360902471446" name="range_start">"Diapazona sākums"</string>
     <string msgid="6420018528474762666" name="search_bar_search">"Meklēšana"</string>
     <string msgid="6043586758067023" name="selected">"Atlasīts"</string>
     <string msgid="3962933905051144957" name="snackbar_dismiss">"Noraidīt"</string>
+    <string msgid="4139871816613051306" name="state_empty">"Tukšs"</string>
+    <string msgid="5834637030682409883" name="state_off">"Izslēgts"</string>
+    <string msgid="1490883874751719580" name="state_on">"Ieslēgts"</string>
     <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
     <string msgid="7189888345201419934" name="suggestions_available">"Tālāk ir sniegti ieteikumi"</string>
     <string msgid="2561197295334830845" name="switch_role">"Slēdzis"</string>
