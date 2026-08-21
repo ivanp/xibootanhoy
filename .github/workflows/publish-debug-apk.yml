@@ -2,9 +2,12 @@ name: Publish Debug APK
 
 on:
   push:
-    branches: [ "development" ]
+    branches: [ "development", "main", "master" ]
     tags: [ "v*" ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -38,10 +41,11 @@ jobs:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Release Debug APK
-        if: startsWith(github.ref, 'refs/tags/')
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('debug-build-{0}', github.run_number) }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || format('Debug Build #{0}', github.run_number) }}
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
